@@ -11,6 +11,14 @@ This is ratelimited by 10 seconds so you don't get banned and accidentally launc
 
 ## usage
 
-`pip install -r requirements.txt`, rename `credentials.py.example` and fill in details, then `python migrate.py` and tada!!
+- `pip install -r requirements.txt`
+- rename `credentials.py.example` and fill in details
+- `python migrate.py` and tada!!
+
+# why the name?
+because im funny (im not)
+
+# are you serious
+no
 
 Copyright (c) 2023 taskylizard. All Rights Reserved.
