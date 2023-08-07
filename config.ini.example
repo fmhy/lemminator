@@ -1,0 +1,12 @@
+[Current]
+username = meow
+password = thisshallnotpass
+
+[Community Migration]
+old = trap@lemmy.fmhy.ml
+new = trap
+limit = 50
+
+[Profile Migration]
+old = ...
+new = ...
