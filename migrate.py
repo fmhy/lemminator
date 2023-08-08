@@ -23,7 +23,6 @@ def get_config():
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--profile",
-    action="store_true",
     required=False,
     type=bool,
     help="Migrate your old profile, otherwise migrate community posts.",
