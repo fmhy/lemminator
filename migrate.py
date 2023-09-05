@@ -94,7 +94,6 @@ if __name__ == "__main__":
                 old_posts = []
                 print(f"fetch error: {e}")
                 break
-                break
 
     else:
         old_user = old.user.get(username=config["Profile Migration"]["old"])
