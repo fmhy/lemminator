@@ -4,10 +4,10 @@ import json
 import traceback
 import sys
 from time import sleep
-from enum import Enum
 
 from pythorhead import Lemmy
 from pythorhead.types import SortType
+
 
 def get_config():
     config = configparser.ConfigParser(interpolation=None)
@@ -51,45 +51,30 @@ if __name__ == "__main__":
     pageCounter = 1
     if not args.profile:
         print("Will migrate communities.")
+
         old_com = old.discover_community(config["Community Migration"]["old"])
-        old_posts = old.post.list(
-            old_com,sort=postSort,page=pageCounter
-        )
+        old_posts = old.post.list(old_com, sort=postSort, page=pageCounter)
         community = new.discover_community(config["Community Migration"]["new"])
-        print(f"Community: '{community}'")
+        print(f"Community: '{config['Community Migration']['old']}'")
 
-
-        while(len(old_posts) > 0):
+        while len(old_posts) > 0:
             for post in old_posts:
                 post_name = post["post"]["name"]
-                post_body = post["post"].get("body", "")
-                post_url = post["post"].get("url", "")
-
-                if post_body:
-                    print(f"{postCounter} Post Name: '{post_name}' With post body")
-                    try:
-                        new.post.create(community, name=post_name, body=post_body)  # type: ignore
-                        print(f"Successfully created a post with body for '{post_name}'")
-                        sleep(10)
-                    except Exception as e:
-                        print(
-                            f"Error while creating post with body for '{post_name}': {str(e)}"
-                        )
-
-                elif post_url:
-                    print(f"{postCounter} Post Name: '{post_name}' Post URL: '{post_url}'")
-                    try:
-                        new.post.create(community, name=post_name, url=post_url)  # type: ignore
-                        print(f"Successfully created a post with URL for '{post_name}'")
-                        sleep(10)
-                    except Exception as e:
-                        print(
-                            f"Error while creating post with URL for '{post_name}': {str(e)}"
-                        )
-                postCounter+=1
-            pageCounter+=1
+                post_body = post["post"].get("body")
+                post_url = post["post"].get("url") or None
+                print(f"-> Post Name: '{post_name}'")
+                try:
+                    new.post.create(community, name=post_name, body=post_body, url=post_url)  # type: ignore
+                    print(
+                        f"• Successfully created a post in {config['Community Migration']['old']}: '{post_name}'"
+                    )
+                    sleep(10)
+                except Exception as e:
+                    print(f"Error while creating post for '{post_name}': {str(e)}")
+            postCounter += 1
+            pageCounter += 1
             try:
-                old_posts = old.post.list(old_com,sort=postSort,page=pageCounter)
+                old_posts = old.post.list(old_com, sort=postSort, page=pageCounter)
             except Exception as e:
                 old_posts = []
                 print(f"fetch error: {e}")
