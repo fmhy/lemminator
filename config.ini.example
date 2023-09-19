@@ -1,6 +1,8 @@
 [Current]
 username = meow
 password = thisshallnotpass
+from = "https://lemmy.world"
+to = "https://lemmy.dbzer0.com"
 
 [Community Migration]
 old = trap@lemmy.fmhy.ml
