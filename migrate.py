@@ -31,21 +31,21 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def get_old_lemmy() -> Lemmy:
-    lemmy = Lemmy("https://lemmy.world")
+def get_old_lemmy(url: str) -> Lemmy:
+    lemmy = Lemmy(url)
     return lemmy
 
 
-def get_lemmy(username: str, password: str) -> Lemmy:
-    lemmy = Lemmy("https://lemmy.fmhy.net")
+def get_lemmy(url: str, username: str, password: str) -> Lemmy:
+    lemmy = Lemmy(url)
     lemmy.log_in(username, password)
     return lemmy
 
 
 if __name__ == "__main__":
     config = get_config()
-    old = get_old_lemmy()
-    new = get_lemmy(config["Current"]["username"], config["Current"]["password"])
+    old = get_old_lemmy(config["Current"]["from"])
+    new = get_lemmy(config["Current"]["to"], config["Current"]["username"], config["Current"]["password"])
     postSort = SortType.Old
     postCounter = 1
     pageCounter = 1
@@ -60,7 +60,11 @@ if __name__ == "__main__":
         while len(old_posts) > 0:
             for post in old_posts:
                 post_name = post["post"]["name"]
-                post_body = post["post"].get("body")
+                post_body = post["post"].get("body") + f'''
+
+---
+[OP]({config["Current"]["from"]}/post/{post["post"]["id"]}) migrated using [Lemminator](https://github.com/fmhy/lemminator/)
+'''
                 post_url = post["post"].get("url") or None
                 print(f"-> Post Name: '{post_name}'")
                 try:
